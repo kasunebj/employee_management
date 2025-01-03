@@ -12,6 +12,7 @@ public interface EmployeeService {
 
     boolean deleteEmployee(Long id);
     PaginatedResponse<EmployeeDTO> getEmployees(int page, int size, String sortBy);
+    EmployeeDTO getEmployeeById(Long id);
 
 }
 

@@ -1,5 +1,7 @@
 package com.library.lib_management_app.service;
 
+import com.library.lib_management_app.dto.DepartmentDTO;
+import com.library.lib_management_app.dto.PositionDTO;
 import com.library.lib_management_app.dto.EmployeeDTO;
 import com.library.lib_management_app.dto.PaginatedResponse;
 import com.library.lib_management_app.entity.Employee;
@@ -66,7 +68,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                         employee.getEmployeeId(),
                         employee.getFirstName(),
                         employee.getLastName(),
-                        employee.getDepartment() != null ? employee.getDepartment().getDepartmentName() : null
+                        employee.getDepartment() != null ? employee.getDepartment().getDepartmentName() : null,
+                        employee.getEmail(),
+                        employee.getPosition() != null ? employee.getPosition().getPositionName() : null
                 ))
                 .collect(Collectors.toList());
 
@@ -76,6 +80,30 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeePage.getSize(),
                 employeePage.getTotalElements()
         );
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeById(Long id) {
+        return employeeRepository.findById(id).map(employee -> {
+            EmployeeDTO dto = new EmployeeDTO();
+            dto.setId(employee.getEmployeeId());
+            dto.setFirstName(employee.getFirstName());
+            dto.setLastName(employee.getLastName());
+            dto.setEmail(employee.getEmail());
+            dto.setPhoneNumber(employee.getPhone());
+            dto.setSalary(employee.getSalary());
+            dto.setHireDate(String.valueOf(employee.getHireDate()));
+
+            DepartmentDTO departmentDTO = new DepartmentDTO();
+            departmentDTO.setId(employee.getDepartment().getDepartmentId());
+            dto.setDepartment(departmentDTO);
+
+            PositionDTO positionDTO = new PositionDTO();
+            positionDTO.setPositionId(employee.getPosition().getPositionId());
+            dto.setPosition(positionDTO);
+
+            return dto;
+        }).orElse(null);
     }
 
 }

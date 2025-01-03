@@ -28,7 +28,7 @@ public class EmployeeController {
         Employee updatedEmployee = employeeService.updateEmployee(id, employee);
         return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
     }
-
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend origin
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         boolean isDeleted = employeeService.deleteEmployee(id);
@@ -46,6 +46,15 @@ public class EmployeeController {
             @RequestParam(defaultValue = "employeeId") String sortBy) {
         PaginatedResponse<EmployeeDTO> response = employeeService.getEmployees(page, size, sortBy);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+        EmployeeDTO employee = employeeService.getEmployeeById(id);
+        if (employee != null) {
+            return ResponseEntity.ok(employee);
+        }
+        return ResponseEntity.notFound().build();
     }
 }
 
