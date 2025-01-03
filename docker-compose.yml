@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: . # Path to the Spring Boot app directory
+    ports:
+      - "8080:8080"  # Expose Spring Boot app on port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/company?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Automatically update schema
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
+    depends_on:
+      - db  # Ensure backend starts after db
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7  # Using MySQL 5.7 image
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Set the root password
+      MYSQL_DATABASE: company  # Create database on startup
+    ports:
+      - "3306:3306"  # Expose MySQL on port 3306
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
