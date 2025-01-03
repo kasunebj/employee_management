@@ -1,18 +1,17 @@
 package com.library.lib_management_app.service;
 
+import com.library.lib_management_app.dto.EmployeeDTO;
+import com.library.lib_management_app.dto.PaginatedResponse;
 import com.library.lib_management_app.entity.Employee;
-import com.library.lib_management_app.repositories.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
-@Service
-public class EmployeeService {
+public interface EmployeeService {
+    Employee addEmployee(Employee employee);
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    Employee updateEmployee(Long employeeId, Employee updatedEmployee);
 
-    public Employee addEmployee(Employee employee) {
-        return employeeRepository.save(employee);
-    }
+    boolean deleteEmployee(Long id);
+    PaginatedResponse<EmployeeDTO> getEmployees(int page, int size, String sortBy);
+
 }
 
